@@ -1,0 +1,19 @@
+{
+  "name": "luci",
+  "version": "1.0.0",
+  "description": "Chatbot for HackPR",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wwcramirez/luci.git"
+  },
+  "author": "Carlos Ramirez, Michael Maysonet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wwcramirez/luci/issues"
+  },
+  "homepage": "https://github.com/wwcramirez/luci#readme"
+}
