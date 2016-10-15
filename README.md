@@ -1,5 +1,5 @@
 # luci
-Chatbot LUCI for HackPR by Wovenware
+Chatbot LUCI for HackPR 
 
 LUCI stands for :
 
