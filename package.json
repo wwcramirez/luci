@@ -10,6 +10,10 @@
     "type": "git",
     "url": "git+https://github.com/wwcramirez/luci.git"
   },
+  "dependencies": {
+    "botbuilder": "^3.2.3",
+    "restify": "^4.1.1"
+  },
   "author": "Carlos Ramirez, Michael Maysonet",
   "license": "ISC",
   "bugs": {
