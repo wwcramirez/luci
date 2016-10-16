@@ -15,7 +15,7 @@ function searchProperties(searchParams, ind, cb) {
 	  	url: deShow + queryParams
 	  }, function (error, response, body) {
   		var bodyObj = JSON.parse(body);
-  		if (ind < bodyObj.properties.length) {
+  		if (body.properties && ind < bodyObj.properties.length) {
   			var result = {
 	  			description: bodyObj.properties[ind].post_content
 	  		};
@@ -36,4 +36,4 @@ function searchProperties(searchParams, ind, cb) {
 //price_range_min​ : numero entero  (default 0) ( opcional)
 //price_range_max​: numero entero (default 900000) ( opcional)
 
-//searchProperties({ 'type': 'casa', 'operation_type': 'venta', 'bedrooms': 3 }, 5, console.log);
+//searchProperties({ 'type': 'venta', 'operation_type': 'casa', 'bedrooms': 3 }, 5, console.log);
