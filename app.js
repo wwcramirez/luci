@@ -28,7 +28,6 @@ var welcomeIntent = new builder.IntentDialog();
 var presentationIntent = new builder.IntentDialog();
 var finishIntent = new builder.IntentDialog();
 var menuIntent = new builder.IntentDialog();
-var newsIntent = new builder.IntentDialog();
 
 var defaultCount = 0;
 
@@ -43,21 +42,21 @@ welcomeIntent.matches(/^Hello|Hi|Hey|Hola/i, [
     	if(session.userData.name) {
     		next();
     	} else {
-    		builder.Prompts.text(session, 'Hey! What is your name?');
+    		builder.Prompts.text(session, '¡Hola! ¿Cuál es tu nombre?');
     	}
     },
     function (session, results) {
         if(!session.userData.name) {
             session.userData.name = results.response;
-            session.send('Nice to meet you %s  ', session.userData.name); 
+            session.send('Mucho gusto %s.', session.userData.name); 
         } else {
-            session.send('Welcome back %s  ', session.userData.name);
+            session.send('Bienvenido nuevamente %s  ', session.userData.name);
         }
         session.beginDialog('/presention');  
     }
 ]);
 
-welcomeIntent.matches(/What\'s|What is your name?/i, 
+welcomeIntent.matches(/¿Cuál es tu nombre?/i, 
     function (session) {
        session.beginDialog('/presention');
     }
@@ -66,7 +65,7 @@ welcomeIntent.matches(/What\'s|What is your name?/i,
 welcomeIntent.onDefault([
     function (session, args, next) {
         defaultCount++;
-        session.send('I don\'t quite get you.');
+        session.send('No sé a qué te refieres.');
         if (defaultCount > 2){
             session.beginDialog('/menu');
         } 
@@ -77,7 +76,7 @@ welcomeIntent.onDefault([
 //--------------------------Presentation-----------------------------
 presentationIntent.onBegin(
     function(session) {
-        session.send('My name is LUCI, it stands for Lexical Understanding Capable Intelligence.');
+        session.send('Mi nombre es LUCI, significa Lexical Understanding Capable Intelligence por sus siglas en inglés.');
         //session.send('How can I help you?');
         session.beginDialog('/menu');
     }
@@ -88,51 +87,49 @@ presentationIntent.onBegin(
 bot.dialog('/menu', [
 
     function (session) {
-        session.send('How can I help you today?');
-           builder.Prompts.choice(session,'Interests:', ["News","Lottery","Horoscopes"]);
-
-            // if(results.response == "News"){
-            //     console.log('entro');
-            //    // session.beginDialog('/news')
-            // }
-        } ,
+        session.send('¿Cómo te puedo ayudar hoy?');
+        builder.Prompts.choice(session,'Interés:', [
+            "Noticias",
+            "Lotería" ,
+            "Horóscopos" 
+        ]);
+    } ,
     function (session, results) {
-      // if(results.response.text == "News") {
-           builder.Prompts.choice(session,'Categories:', ["Latests","Trending"]);
-      // }    
-    //    } else if (results.response == "Lottery") {
-    //        //TODO Lottery
-    //    } else {
-    //        //TODO Horoscopes
-    //    }
+
+       if(results.response.entity === "Noticias") {
+
+           builder.Prompts.choice(session,'Categorías:', ["Recientes","Más Vistas"]);  
+
+       } else if (results.response.entity == "Lottery") {
+           //TODO Lottery
+       } else {
+           //TODO Horoscopes
+       }
     },
     function (session, results) {
         //TODO request to API here
-        //if(results.response.text == "Latests") {
+        if(results.response.entity === "Recientes") {
+            //Latest
             cfrApi.fetchLatest(function(result){
                 session.send(result.title + '\n' + result.url);
                 
             });
-       // } else {
+       } else {
             //Trending
-        //}
+            cfrApi.fetchTrending(function(result){
+                session.send(result.title + '\n' + result.url);
+                
+            });
+        }
     }
 ]);
 //-------------------------------------------------------------------
 
-// newsIntent.onBegin(
-//      function (session) {
-//        console.log('news');
-//         builder.Prompts.choice(session,'Categories:', ["Latests","Trending"]);
-       
-//     }
-// );
-
-//--------------------------Goodbye-----------------------------
-finishIntent.matches(/bye?/i, [
+//--------------------------Goodbye----------------------------------
+finishIntent.matches(/adiós|adios|bye?/i, [
     function (session) {
     	session.userData = {};
-    	session.send('Goodbye!');
+    	session.send('¡Nos vemos luego!');
         session.endDialog();
     }
 ]);
