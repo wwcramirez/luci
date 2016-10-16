@@ -1,7 +1,7 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 var request = require('request');
-var cfrApi = require('./cfrApi');
+var cfrApi = require('./gfrApi');
 //=========================================================
 // Bot Setup
 //=========================================================
@@ -29,10 +29,9 @@ var presentationIntent = new builder.IntentDialog();
 var finalIntent = new builder.IntentDialog();
 
 var defaultCount = 0;
+
 var timeOfDay = new Date();
 var greeting;
-
-console.log(timeOfDay.getHours());
 if (timeOfDay.getHours() > 4 && timeOfDay.getHours() < 12) {
     greeting = "¡Buenos días ";
 } else if (timeOfDay.getHours() >= 12 && timeOfDay.getHours() < 17) {
@@ -97,7 +96,7 @@ presentationIntent.onBegin(
 bot.dialog('/menu', [
 
     function (session) {
-        session.send('¿Cómo te puedo ayudar?'); //hoy
+        session.send('¿Cómo te puedo ayudar?');
         builder.Prompts.choice(session,'Interés:', [
             "Noticias",
             "Lotería" ,
@@ -120,14 +119,14 @@ bot.dialog('/menu', [
         //var resultComplete;
         if (results.response.entity === "Recientes") {
             //Latest
-            cfrApi.fetchLatest(function(result){
+            gfrApi.fetchLatest(function(result){
                 session.send(result.title + '\n' + result.url);
                 //resultComplete = result;   
                  session.beginDialog('/segue');         
             });
        } else if (results.response.entity === "Más Vistas")  {
             //Trending
-            cfrApi.fetchTrending(function(result){
+            gfrApi.fetchTrending(function(result){
                 session.send(result.title + '\n' + result.url); 
                 //resultComplete = result; 
                  session.beginDialog('/segue');   
@@ -148,7 +147,7 @@ bot.dialog('/horoscopes',[
     function (session, results) {
         try {
             console.log(results);
-            cfrApi.fetchHoroscopes(results.response,function(result){
+            gfrApi.fetchHoroscopes(results.response,function(result){
                 session.send(result.text); 
                 session.beginDialog('/segue');  
             });    
@@ -168,7 +167,7 @@ bot.dialog('/lottery', [
     function (session, results) {
         try {
           
-            cfrApi.fetchLottery(results.response,function(result){
+            gfrApi.fetchLottery(results.response,function(result){
                 var jsonString = JSON.stringify(result);
                 session.send('Los números ganadores son los siguientes: ' + jsonString); 
                 session.beginDialog('/segue');   
