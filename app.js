@@ -206,7 +206,6 @@ bot.dialog('/properties', [
                           'operation_post': session.userData.operationType 
                         };
             deShowApi.searchProperties(params, 0, function(result){
-               // var str = result.join([separator = ', '])
                if(result.description){
                     session.send('Esto fue lo que encontré para ti: ' + result.description); 
                } else {
