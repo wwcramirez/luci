@@ -77,12 +77,16 @@ function fetchLottery(filter, cb) {
   		var l = bodyObj.lottery[filter.replace(' ', '').toLowerCase()];
 
 		if (l[0].winners) {
+			var numWinners = l[0].winners.map(function (val) {
+				return int.Parse(val, 10);
+			});
+
 			cb(l[0].winners);
 		}	
 
 		else {
 			var winners = l.map(function (val) {
-				return val.winner;
+				return int.Parse(val.winner, 10);
 			});
 
 			cb(winners);
