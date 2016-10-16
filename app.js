@@ -106,7 +106,8 @@ bot.dialog('/menu', [
             "Noticias",
             "Lotería" ,
             "Horóscopos",
-            "Propiedades"
+            "Propiedades",
+            "Adiós"
         ]);
     } ,
     function (session, results) {
@@ -119,8 +120,10 @@ bot.dialog('/menu', [
            session.beginDialog('/lottery');
        } else if (results.response.entity === "Horóscopos" ) {
            session.beginDialog('/horoscopes');  
-       } else {
+       } else if (results.response.entity === "Propiedades" )  {
            session.beginDialog('/properties');
+       } else {
+            session.beginDialog('/goodbye');
        }
     },
     function (session, results) {
@@ -241,13 +244,6 @@ bot.dialog('/segue', [
 //=========================================================
 // Goodbye
 //=========================================================
-finalIntent.matches(/adiós|adios|bye?/i, [
-    function (session) {
-    	session.userData = {};
-    	session.send('¡Nos vemos luego!');
-        session.endDialog();
-    }
-]);
 finalIntent.onBegin(
    function (session) {
         session.userData = {};
