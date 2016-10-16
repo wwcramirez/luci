@@ -32,7 +32,6 @@ var menuIntent = new builder.IntentDialog();
 var defaultCount = 0;
 
 bot.dialog('/', welcomeIntent);
-bot.dialog('/news', newsIntent);
 bot.dialog('/presention', presentationIntent);
 bot.dialog('/goodbye', finishIntent);
 
@@ -100,30 +99,70 @@ bot.dialog('/menu', [
 
            builder.Prompts.choice(session,'Categorías:', ["Recientes","Más Vistas"]);  
 
-       } else if (results.response.entity == "Lottery") {
+       } else if (results.response.entity == "Lotería") {
            //TODO Lottery
+           session.beginDialog('/lottery');
        } else {
            //TODO Horoscopes
+           session.beginDialog('/horoscopes');  
        }
     },
     function (session, results) {
         //TODO request to API here
-        if(results.response.entity === "Recientes") {
+        if (results.response.entity === "Recientes") {
             //Latest
             cfrApi.fetchLatest(function(result){
-                session.send(result.title + '\n' + result.url);
-                
+                session.send(result.title + '\n' + result.url);     
             });
-       } else {
+       } else if (results.response.entity === "Más Vistas")  {
             //Trending
             cfrApi.fetchTrending(function(result){
-                session.send(result.title + '\n' + result.url);
-                
+                session.send(result.title + '\n' + result.url);      
             });
+        } else {
+
         }
     }
 ]);
 //-------------------------------------------------------------------
+bot.dialog('/horoscopes',[ 
+    function(session){
+        builder.Prompts.text(session, "¿Cuál es tu signo zodiacal?");
+    }, 
+    function (session, results) {
+        try {
+            console.log(results);
+            cfrApi.fetchHoroscopes(results.response,function(result){
+                session.send(result.text); 
+                //TODO Cambiar a un diálogo final' 
+                session.beginDialog('/menu');    
+            });    
+        } catch (error) {
+            console.log(error);
+            session.send('No sé a qué te refieres.');
+        }
+    }
+]);
+
+bot.dialog('/lottery', [
+    function(session){
+        builder.Prompts.text(session, "¿Cuál tipo de lotería le interesa?");
+    }, 
+    function (session, results) {
+        try {
+          
+            cfrApi.fetchLottery(results.response,function(result){
+                console.log(result);
+                session.send(result); 
+                //TODO Cambiar a un diálogo final' 
+                //session.beginDialog('/menu');    
+            });    
+        } catch (error) {
+            console.log(error);
+            session.send('No sé a qué te refieres.');
+        }
+     }
+])
 
 //--------------------------Goodbye----------------------------------
 finishIntent.matches(/adiós|adios|bye?/i, [
@@ -133,6 +172,8 @@ finishIntent.matches(/adiós|adios|bye?/i, [
         session.endDialog();
     }
 ]);
+
+//builder.Prompts.confirm(session, "Are you sure you wish to cancel your order?");
 
 finishIntent.onDefault([
     function (session, args, next) {
