@@ -6,7 +6,8 @@ var endi = 'http://www.elnuevodia.com';
 module.exports = {
 	fetchLatest: fetchLatest,
 	fetchTrending: fetchTrending,
-	fetchHoroscopes: fetchHoroscopes	
+	fetchHoroscopes: fetchHoroscopes,
+	fetchLottery: fetchLottery	
 };
 
 function fetchLatest(cb) {
@@ -62,4 +63,29 @@ function fetchHoroscopes(filter, cb) {
 
   		cb(result);
 	  });
+}
+
+function fetchLottery(filter, cb) {
+	request(
+	  { 
+	  	url: 'https://gfrmservices.azure-api.net/end/v3/lottery', 
+	  	headers: {
+	  		'Ocp-Apim-Subscription-Key': apiKey
+	  	} 
+	  }, function (error, response, body) {
+  		var bodyObj = JSON.parse(body);
+  		var l = bodyObj.lottery[filter.replace(' ', '').toLowerCase()];
+
+		if (l[0].winners) {
+			cb(l[0].winners);
+		}	
+
+		else {
+			var winners = l.map(function (val) {
+				return val.winner;
+			});
+
+			cb(winners);
+		}
+	});
 }
