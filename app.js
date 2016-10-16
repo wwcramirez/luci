@@ -1,7 +1,7 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 var request = require('request');
-var cfrApi = require('./gfrApi');
+var gfrApi = require('./gfrApi');
 //=========================================================
 // Bot Setup
 //=========================================================
@@ -168,8 +168,9 @@ bot.dialog('/lottery', [
         try {
           
             gfrApi.fetchLottery(results.response,function(result){
-                var jsonString = JSON.stringify(result);
-                session.send('Los números ganadores son los siguientes: ' + jsonString); 
+                var str = result.join([separator = ', '])
+                var jsonString = JSON.stringify(str);
+                session.send('Los números ganadores son los siguientes: ' + jsonString + '.'); 
                 session.beginDialog('/segue');   
             });    
         } catch (error) {
@@ -177,6 +178,12 @@ bot.dialog('/lottery', [
             session.send('No sé a qué te refieres.');
         }
      }
+]);
+
+//=========================================================
+// Properties (Housing)
+//=========================================================
+bot.dialog('/properties', [
 ]);
 
 //=========================================================
