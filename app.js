@@ -51,18 +51,6 @@ welcomeIntent.matches(/^Hello|Hi|Hey|Hola/i, [
     	if(session.userData.name) {
     		next();
     	} else {
-//             morning/dawn   0:00  5:00                  
-// early morning  5:00  6:00                  Good morning
-// morning        6:00  9:00 breakfast        Good morning
-// mid-morning    9:00 11:59 elevenses/       Good morning
-//                           morning tea/
-//                           brunch
-// noon          12:00 12:00 -
-// afternoon     12:00 17:00 lunch/           Good afternoon
-//                           afternoon tea
-// evening       17:00 21:00 supper           Good evening
-// night         21:00 23:00 night-time snack Good evening
-// midnight      23:00  1:00 midnight snack   Good night
     		builder.Prompts.text(session, greeting + '! ¿Cuál es tu nombre?');
     	}
     },
