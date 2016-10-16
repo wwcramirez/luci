@@ -36,7 +36,7 @@ function fetchTrending(cb) {
 	  }, function (error, response, body) {
   		var bodyObj = JSON.parse(body);
   		var result = {
-  			url: bodyObj.trending_articles.values[0].url,
+  			url: endi + bodyObj.trending_articles.values[0].url,
   			title: bodyObj.trending_articles.values[0].text
   		};
 
