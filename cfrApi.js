@@ -5,7 +5,8 @@ var endi = 'http://www.elnuevodia.com';
 
 module.exports = {
 	fetchLatest: fetchLatest,
-	fetchTrending: fetchTrending	
+	fetchTrending: fetchTrending,
+	fetchHoroscopes: fetchHoroscopes	
 };
 
 function fetchLatest(cb) {
@@ -38,6 +39,25 @@ function fetchTrending(cb) {
   		var result = {
   			url: endi + bodyObj.trending_articles.values[0].url,
   			title: bodyObj.trending_articles.values[0].text
+  		};
+
+  		cb(result);
+	  });
+}
+
+function fetchHoroscopes(filter, cb) {
+	request(
+	  { 
+	  	url: 'https://gfrmservices.azure-api.net/end/v3/horoscope', 
+	  	headers: {
+	  		'Ocp-Apim-Subscription-Key': apiKey
+	  	} 
+	  }, function (error, response, body) {
+  		var bodyObj = JSON.parse(body);
+  		var h = bodyObj.horoscopes[filter.toLowerCase()].horoscope;
+
+  		var result = {
+  			text: h.text
   		};
 
   		cb(result);
