@@ -2,6 +2,8 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var request = require('request');
 var gfrApi = require('./gfrApi');
+var deShowApi = require('./deShowApi');
+
 //=========================================================
 // Bot Setup
 //=========================================================
@@ -103,7 +105,8 @@ bot.dialog('/menu', [
         builder.Prompts.choice(session,'Interés:', [
             "Noticias",
             "Lotería" ,
-            "Horóscopos" 
+            "Horóscopos",
+            "Propiedades"
         ]);
     } ,
     function (session, results) {
@@ -114,8 +117,10 @@ bot.dialog('/menu', [
 
        } else if (results.response.entity === "Lotería") {
            session.beginDialog('/lottery');
-       } else {
+       } else if (results.response.entity === "Horóscopos" ) {
            session.beginDialog('/horoscopes');  
+       } else {
+           session.beginDialog('/properties');
        }
     },
     function (session, results) {
@@ -145,7 +150,6 @@ bot.dialog('/horoscopes',[
     }, 
     function (session, results) {
         try {
-            console.log(results);
             gfrApi.fetchHoroscopes(results.response,function(result){
                 session.send(result.text); 
                 session.beginDialog('/segue');  
@@ -168,13 +172,11 @@ bot.dialog('/lottery', [
         try {
           
             gfrApi.fetchLottery(results.response,function(result){
-                var str = result.join([separator = ', '])
-                var jsonString = JSON.stringify(str);
-                session.send('Los números ganadores son los siguientes: ' + jsonString + '.'); 
+                var str = result.join(', ');
+                session.send('Los números ganadores son los siguientes: ' + str + '.'); 
                 session.beginDialog('/segue');   
             });    
         } catch (error) {
-            console.log(error);
             session.send('No sé a qué te refieres.');
         }
      }
@@ -184,6 +186,35 @@ bot.dialog('/lottery', [
 // Properties (Housing)
 //=========================================================
 bot.dialog('/properties', [
+    function(session){
+        builder.Prompts.choice(session, "¿Cuál tipo de propiedad le interesa?", 
+                ["Apartamento","Casa","Comercial","Multi­-familiar","Solar","Walk­-up­-es"], {listStyle: builder.ListStyle.list});
+    }, function (session, results) {
+        session.userData.propertyType = results.response.entity;
+        builder.Prompts.text(session, "¿Cuántas habitaciones?");
+    }, function (session, results) {
+        session.userData.rooms = results.response;
+        builder.Prompts.choice(session, "¿Qué quiere hacer con la propiedad?", ["Venta","Rent-to-Own"]);
+    }, function (session, results, next) {
+        session.userData.operationType = results.response.entity;
+        next();
+    }, function (session) {
+        try {
+            var params = {
+                          'type​' : session.userData.propertyType ,
+                          'bedrooms​' : session.userData.rooms,
+                          'operation_type​' :  session.userData.operationType 
+                        };
+            deShowApi.searchProperties(params, 0, function(result){
+               // var str = result.join([separator = ', '])
+                session.send('Esto fue lo que encontré para ti: ' + result.description); 
+                session.beginDialog('/segue');   
+            });    
+        } catch (error) {
+            console.log(error);
+            session.send('No sé a qué te refieres.');
+        }
+     }
 ]);
 
 //=========================================================

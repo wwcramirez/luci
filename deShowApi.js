@@ -9,21 +9,23 @@ module.exports = {
 
 function searchProperties(searchParams, ind, cb) {
   var queryParams = querystring.stringify(searchParams);
-  //console.log(deShow + queryParams);
+  console.log(deShow + queryParams);
 
   request(
 	  {
 	    url: deShow + queryParams
 	  }, function (error, response, body) {
-
+			console.log('hello');
 	    var bodyObj = JSON.parse(body);
 
 	    if (bodyObj.properties && ind < bodyObj.properties.length) {
 	      var result = {
-	        description: bodyObj.properties[ind].post_content
+	        description: bodyObj.properties[ind].post_content.replace(/<(?:.|\n)*?>/gm, '')
 	      };
 
 	      cb(result);
+
+				return;
 	    }
 
 	    cb([]);
