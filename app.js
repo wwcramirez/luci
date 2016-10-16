@@ -1,7 +1,7 @@
 var restify = require('restify');
 var builder = require('botbuilder');
 var request = require('request');
-var cfrApi = require('./gfrApi');
+var gfrApi = require('./gfrApi');
 //=========================================================
 // Bot Setup
 //=========================================================
