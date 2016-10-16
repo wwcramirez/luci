@@ -9,7 +9,7 @@ module.exports = {
 
 function searchProperties(searchParams, ind, cb) {
   var queryParams = querystring.stringify(searchParams);
-  console.log(deShow + queryParams);
+  //console.log(deShow + queryParams);
 
   request(
 	  {
@@ -39,4 +39,4 @@ function searchProperties(searchParams, ind, cb) {
 //price_range_min​ : numero entero  (default 0) ( opcional)
 //price_range_max​: numero entero (default 900000) ( opcional)
 
-searchProperties({ 'type': 'casa', 'operation_type': 'venta', 'bedrooms': 3 }, 0, console.log);
+//searchProperties({ 'type': 'casa', 'operation_type': 'venta', 'bedrooms': 3 }, 0, console.log);
