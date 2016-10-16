@@ -37,7 +37,7 @@ var greeting;
 if (timeOfDay.getHours() > 4 && timeOfDay.getHours() < 12) {
     greeting = "¡Buenos días ";
 } else if (timeOfDay.getHours() >= 12 && timeOfDay.getHours() < 17) {
-     greeting = "¡Buenos tardes ";
+     greeting = "¡Buenas tardes ";
 } else {
      greeting = "¡Buenas noches ";
 }
