@@ -85,14 +85,24 @@ presentationIntent.onBegin(
 //-------------------------------------------------------------------
 
 //-----------------------------Menu----------------------------------
-menuIntent.onBegin(
-    function(session) {
+menuIntent.onBegin([
+    function(session, next) {
         session.send('How can I help you today?', session.userData.name);
         builder.Prompts.choice(session, ["News","Lottery","Horoscopes"]);
         next();
+    }, 
+    function(session, results) {
+       if(results.response === "News") {
+           builder.Prompts.choice(session, ["Latests","Trending"]);
+           next();
+       } else {
+
+       }
+    },
+    function (session, results) {
+        //TODO request to API here
     }
-    
-);
+]);
 //-------------------------------------------------------------------
 
 //--------------------------Goodbye-----------------------------
