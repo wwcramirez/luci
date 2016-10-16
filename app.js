@@ -207,7 +207,12 @@ bot.dialog('/properties', [
                         };
             deShowApi.searchProperties(params, 0, function(result){
                // var str = result.join([separator = ', '])
-                session.send('Esto fue lo que encontré para ti: ' + result.description); 
+               if(result.description){
+                    session.send('Esto fue lo que encontré para ti: ' + result.description); 
+               } else {
+                    session.send('No encontré ninguna propiedad.');
+               }
+                
                 session.beginDialog('/segue');   
             });    
         } catch (error) {
