@@ -188,7 +188,7 @@ bot.dialog('/lottery', [
 bot.dialog('/properties', [
     function(session){
         builder.Prompts.choice(session, "¿Cuál tipo de propiedad le interesa?", 
-                ["Apartamento","Casa","Comercial","Multi­-familiar","Solar","Walk­-up­-es"], {listStyle: builder.ListStyle.list});
+                ["Apartamento","Casa","Comercial","Multi-familiar","Solar","Walk­up­es"], {listStyle: builder.ListStyle.list});
     }, function (session, results) {
         session.userData.propertyType = results.response.entity;
         builder.Prompts.text(session, "¿Cuántas habitaciones?");
@@ -201,9 +201,9 @@ bot.dialog('/properties', [
     }, function (session) {
         try {
             var params = {
-                          'type​' : session.userData.propertyType ,
-                          'bedrooms​' : session.userData.rooms,
-                          'operation_type​' :  session.userData.operationType 
+                          'type': session.userData.propertyType,
+                          'bedrooms': session.userData.rooms,
+                          'operation_post': session.userData.operationType 
                         };
             deShowApi.searchProperties(params, 0, function(result){
                // var str = result.join([separator = ', '])
