@@ -4,26 +4,29 @@ var querystring = require('querystring');
 var deShow = 'http://listcompare.it/wp-json/wp/v2/search-properties?';
 
 module.exports = {
-	searchProperties: searchProperties
+  searchProperties: searchProperties
 };
 
 function searchProperties(searchParams, ind, cb) {
-	var queryParams = querystring.stringify(searchParams);
+  var queryParams = querystring.stringify(searchParams);
+  console.log(deShow + queryParams);
 
-	request(
-	  { 
-	  	url: deShow + queryParams
+  request(
+	  {
+	    url: deShow + queryParams
 	  }, function (error, response, body) {
-  		var bodyObj = JSON.parse(body);
-  		if (body.properties && ind < bodyObj.properties.length) {
-  			var result = {
-	  			description: bodyObj.properties[ind].post_content
-	  		};
 
-  			cb(result);
-  		}
+	    var bodyObj = JSON.parse(body);
 
-  		cb([]);  		
+	    if (bodyObj.properties && ind < bodyObj.properties.length) {
+	      var result = {
+	        description: bodyObj.properties[ind].post_content
+	      };
+
+	      cb(result);
+	    }
+
+	    cb([]);
 	  });
 }
 
@@ -36,4 +39,4 @@ function searchProperties(searchParams, ind, cb) {
 //price_range_min​ : numero entero  (default 0) ( opcional)
 //price_range_max​: numero entero (default 900000) ( opcional)
 
-//searchProperties({ 'type': 'venta', 'operation_type': 'casa', 'bedrooms': 3 }, 5, console.log);
+searchProperties({ 'type': 'casa', 'operation_type': 'venta', 'bedrooms': 3 }, 0, console.log);
