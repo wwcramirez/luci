@@ -44,7 +44,9 @@ bot.dialog('/', welcomeIntent);
 bot.dialog('/presention', presentationIntent);
 bot.dialog('/goodbye', finalIntent);
 
-//--------------------------Welcome-----------------------------
+//=========================================================
+// Welcome
+//=========================================================
 welcomeIntent.matches(/^Hello|Hi|Hey|Hola/i, [
     function (session, args, next) {
     	if(session.userData.name) {
@@ -59,7 +61,6 @@ welcomeIntent.matches(/^Hello|Hi|Hey|Hola/i, [
             session.send('Mucho gusto %s.', session.userData.name); 
             session.beginDialog('/presention');
         } else {
-            //Buenos días/Buenas tardes/ Buenas noches
             session.send(greeting + '%s!', session.userData.name);
             session.beginDialog('/menu');
         }       
@@ -81,18 +82,20 @@ welcomeIntent.onDefault([
         } 
     }
 ]);
-//-------------------------------------------------------------------
 
-//--------------------------Presentation-----------------------------
+//=========================================================
+// Presentation
+//=========================================================
 presentationIntent.onBegin(
     function(session) {
         session.send('Mi nombre es LUCI, significa Lexical Understanding Capable Intelligence por sus siglas en inglés.');
         session.beginDialog('/menu');
     }
 );
-//-------------------------------------------------------------------
 
-//-----------------------------Menu and News-------------------------
+//=========================================================
+// Menu and News
+//=========================================================
 bot.dialog('/menu', [
 
     function (session) {
@@ -116,30 +119,26 @@ bot.dialog('/menu', [
        }
     },
     function (session, results) {
-        //var resultComplete;
+      
         if (results.response.entity === "Recientes") {
             //Latest
             gfrApi.fetchLatest(function(result){
-                session.send(result.title + '\n' + result.url);
-                //resultComplete = result;   
-                 session.beginDialog('/segue');         
+                session.send(result.title + '\n' + result.url);   
+                session.beginDialog('/segue');         
             });
        } else if (results.response.entity === "Más Vistas")  {
             //Trending
             gfrApi.fetchTrending(function(result){
                 session.send(result.title + '\n' + result.url); 
-                //resultComplete = result; 
-                 session.beginDialog('/segue');   
+                session.beginDialog('/segue');   
             });
         } 
-        //TODO Handle Async Calls
-        //session.beginDialog('/segue');
-           
     }
 ]);
-//-------------------------------------------------------------------
 
-//--------------------------Horoscopes-------------------------------
+//=========================================================
+// Horoscopes
+//=========================================================
 bot.dialog('/horoscopes',[ 
     function(session){
         builder.Prompts.text(session, "¿Cuál es tu signo zodiacal?");
@@ -157,9 +156,10 @@ bot.dialog('/horoscopes',[
         }
     }
 ]);
-//-------------------------------------------------------------------
 
-//--------------------------Lottery----------------------------------
+//=========================================================
+// Lottery
+//=========================================================
 bot.dialog('/lottery', [
     function(session){
         builder.Prompts.text(session, "¿Cuál tipo de lotería le interesa?");
@@ -178,9 +178,10 @@ bot.dialog('/lottery', [
         }
      }
 ]);
-//-------------------------------------------------------------------
 
-//--------------------------Segue----------------------------------
+//=========================================================
+// Segue
+//=========================================================
 bot.dialog('/segue', [
      function (session){
         builder.Prompts.choice(session, "¿Te puedo ayudar en algo más?", ['Sí', 'No']);
@@ -194,10 +195,10 @@ bot.dialog('/segue', [
         }
     }   
 ]);
-//-------------------------------------------------------------------
 
-//--------------------------Goodbye----------------------------------
-
+//=========================================================
+// Goodbye
+//=========================================================
 finalIntent.matches(/adiós|adios|bye?/i, [
     function (session) {
     	session.userData = {};
@@ -212,5 +213,5 @@ finalIntent.onBegin(
         session.endDialog();
     }   
 );
-//-------------------------------------------------------------------
+
 
