@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/wwcramirez/luci/issues"
   },
-  "homepage": "https://github.com/wwcramirez/luci#readme"
+  "homepage": "https://github.com/wwcramirez/luci#readme",
+  "dependencies": {
+    "request": "^2.75.0"
+  }
 }
