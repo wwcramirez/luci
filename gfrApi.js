@@ -78,15 +78,15 @@ function fetchLottery(filter, cb) {
 
 		if (l[0].winners) {
 			var numWinners = l[0].winners.map(function (val) {
-				return int.Parse(val, 10);
+				return parseInt(val, 10);
 			});
 
-			cb(l[0].winners);
+			cb(numWinners);
 		}	
 
 		else {
 			var winners = l.map(function (val) {
-				return int.Parse(val.winner, 10);
+				return parseInt(val.winner, 10);
 			});
 
 			cb(winners);
