@@ -43,7 +43,7 @@ if (timeOfDay.getHours() > 4 && timeOfDay.getHours() < 12) {
 }
 
 bot.dialog('/', welcomeIntent);
-bot.dialog('/presention', presentationIntent);
+bot.dialog('/presentation', presentationIntent);
 bot.dialog('/goodbye', finalIntent);
 
 //=========================================================
@@ -61,7 +61,7 @@ welcomeIntent.matches(/^Hello|Hi|Hey|Hola/i, [
         if(!session.userData.name) {
             session.userData.name = results.response;
             session.send('Mucho gusto %s.', session.userData.name); 
-            session.beginDialog('/presention');
+            session.beginDialog('/presentation');
         } else {
             session.send(greeting + '%s!', session.userData.name);
             session.beginDialog('/menu');
@@ -71,7 +71,7 @@ welcomeIntent.matches(/^Hello|Hi|Hey|Hola/i, [
 
 welcomeIntent.matches(/¿Cuál es tu nombre?/i, 
     function (session) {
-       session.beginDialog('/presention');
+       session.beginDialog('/presentation');
     }
 );
 
@@ -247,7 +247,7 @@ bot.dialog('/segue', [
 finalIntent.onBegin(
    function (session) {
         session.userData = {};
-        session.send('¡Nos vemos luego!');
+        session.send('¡Hablamos luego!');
         session.endDialog();
     }   
 );
